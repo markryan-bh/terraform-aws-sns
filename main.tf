@@ -29,10 +29,24 @@ data "aws_iam_policy_document" "this" {
       }
     }
   }
+
+  dynamic "statement" {
+    for_each = length(var.allow_subscribe_iam_arns) > 0 ? [true] : []
+    content {
+      sid       = "Subscribe"
+      effect    = "Allow"
+      actions   = ["sns:Subscribe"]
+      resources = ["*"]
+      principals {
+        type        = "AWS"
+        identifiers = var.allow_subscribe_iam_arns
+      }
+    }
+  }
 }
 
 locals {
-  # an iam policy doc with an empty `statement` means var.allow_publish_* were empty
+  # an iam policy doc with an empty `statement` means var.allow_* were empty
   policy_doc_is_valid = data.aws_iam_policy_document.this[0].statement != null
 
   # we only want to use our policy doc if it's valid and var.policy is null
