@@ -35,7 +35,7 @@ data "aws_iam_policy_document" "this" {
     content {
       sid       = "Subscribe"
       effect    = "Allow"
-      actions   = ["sns:Subscribe", "SNS:Unsubscribe"]
+      actions   = ["sns:Subscribe", "sns:Unsubscribe"]
       resources = ["*"]
       principals {
         type        = "AWS"
